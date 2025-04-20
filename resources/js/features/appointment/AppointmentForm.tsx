@@ -121,8 +121,26 @@ const AppointmentForm = () => {
 
     setIsSubmitting(true)
     try {
-      // Simulate API call with timeout
-      await new Promise((resolve) => setTimeout(resolve, 1000))
+      const response = await fetch("http://127.0.0.1:8000/api/appointments", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          frequency: formData.frequency,
+          appointment_date: formData.appointment_date?.toISOString(),
+          selected_day: formData.selected_day,
+          time_slot: formData.time_slot,
+          notes: formData.notes,
+        }),
+      })
+
+      if (!response.ok) {
+        throw new Error("Failed to submit appointment")
+      }
+
+      // Optionally parse JSON if your Laravel response includes something
+      // const result = await response.json()
 
       // Show success message and set success state
       setIsSuccess(true)

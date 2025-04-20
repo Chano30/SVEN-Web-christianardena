@@ -16,15 +16,12 @@ class HoneypotMiddleware
     public function handle(Request $request, Closure $next): Response
     {
         // Check if the honeypot field is filled (it should be empty)
-        if ($request->filled('website') || $request->filled('email_confirm')) {
-            // This is likely a bot
-            abort(422, 'Invalid submission');
-          {
-            // This is likely a bot
-            abort(422, 'Invalid submission');
+        if ($request->filled('website')) {
+            // Return a response indicating an invalid submission
+            return response()->json(['message' => 'Invalid submission'], 422);
         }
 
+        // Allow the request to proceed
         return $next($request);
     }
-}
 }
